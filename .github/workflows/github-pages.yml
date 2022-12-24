@@ -1,0 +1,32 @@
+name: Init CI
+
+on:
+  push:
+    branches:
+      - '*'
+      - '!master'
+      - '!deploy'
+      - '!compose'
+      - '!production'
+      - '!development'
+
+jobs:
+  # Build job
+  github-pages:
+    runs-on: self-hosted
+    steps:
+      - name: 📂 Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: 🚀 Setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+
+      - name: 🔨 Get Linux-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-cache--${{ hashFiles('**/Makefile') }}
